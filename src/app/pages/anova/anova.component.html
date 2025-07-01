@@ -1,1 +1,64 @@
-<p>anova works!</p>
+<header class="navbar">
+  <button class="logo-btn" [routerLink]="['/']">
+    <img src="assets/logo-gunadarma.png" alt="Logo" class="logo-img" />
+    Universitas Gunadarma
+  </button>
+</header>
+
+<main class="bivariate-wrapper">
+  <div class="form-card">
+    <h2>Uji ANOVA <i>(One-Way)</i></h2>
+
+    <form>
+      <label>Nama kasus</label>
+      <input type="text" placeholder="Masukkan nama kasus" />
+
+      <label>Nama variabel dependen</label>
+      <input type="text" placeholder="Misal: Nilai, Berat Badan, dsb." />
+
+      <label>Nama kelompok</label>
+      <input type="text" placeholder="Misal: Kelas A, Kelas B, Kelas C" />
+
+      <label>Ho</label>
+      <input type="text" placeholder="Misal: Semua rata-rata kelompok sama" />
+
+      <label>Ha</label>
+      <input type="text" placeholder="Misal: Ada perbedaan minimal satu kelompok" />
+
+      <label>Cara input nilai</label>
+      <select [(ngModel)]="anovaInputMethod" name="anovaInputMethod">
+        <option value="">Pilih metode</option>
+        <option value="excel">Import Excel</option>
+        <option value="manual">Manual</option>
+      </select>
+
+      <div *ngIf="anovaInputMethod === 'excel'" class="upload-box" (click)="fileInput.click()">
+        <span class="upload-icon">📁</span>
+        <p>Upload from computer</p>
+        <input type="file" hidden (change)="onAnovaFileSelected($event)" #fileInput />
+        <span *ngIf="selectedAnovaFile">{{ selectedAnovaFile.name }}</span>
+      </div>
+
+      <div *ngIf="anovaInputMethod === 'manual'" class="manual-inputs">
+        <label>Masukkan data tiap kelompok</label>
+        <div class="manual-group" *ngFor="let group of manualGroups; let i = index">
+          <div>
+            <label>Kelompok {{ i + 1 }}</label>
+            <input type="number" *ngFor="let value of group.values; let j = index" [(ngModel)]="group.values[j]" name="g{{i}}val{{j}}" />
+          </div>
+        </div>
+        <button type="button" (click)="addGroup()">+ Tambah Kelompok</button>
+      </div>
+
+      <label>Nilai Alpha</label>
+      <select>
+        <option disabled selected>Pilih nilai Alpha</option>
+        <option>0.01</option>
+        <option>0.05</option>
+        <option>0.10</option>
+      </select>
+
+      <button type="submit">Hitung</button>
+    </form>
+  </div>
+</main>
