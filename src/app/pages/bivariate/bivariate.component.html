@@ -1,1 +1,66 @@
-<p>bivariate works!</p>
+<header class="navbar">
+  <button class="logo-btn" [routerLink]="['/']">
+    <img src="assets/logo-gunadarma.png" alt="Logo" class="logo-img" />
+    Universitas Gunadarma
+  </button>
+</header>
+
+<main class="bivariate-wrapper">
+  <div class="form-card">
+    <h2>Korelasi Bivariate <i>(Pearson)</i></h2>
+
+    <form>
+      <label>Nama kasus</label>
+      <input type="text" placeholder="Masukkan nama kasus" />
+
+      <label>Nama variabel X</label>
+      <input type="text" placeholder="Masukkan variabel X" />
+
+      <label>Nama variabel Y</label>
+      <input type="text" placeholder="Masukkan variabel Y" />
+
+      <label>Ho</label>
+      <input type="text" placeholder="Masukkan hipotesis Ho" />
+
+      <label>Ha</label>
+      <input type="text" placeholder="Masukkan hipotesis Ha" />
+
+      <label>Cara input nilai variabel</label>
+      <select [(ngModel)]="inputMethod" name="inputMethod">
+        <option value="">Pilih metode</option>
+        <option value="excel">Import Excel</option>
+        <option value="manual">Manual</option>
+      </select>
+
+      <div *ngIf="inputMethod === 'excel'" class="upload-box" (click)="fileInput.click()">
+        <span class="upload-icon">📁</span>
+        <p>Upload from computer</p>
+        <input type="file" hidden (change)="onFileSelected($event)" #fileInput />
+        <span *ngIf="selectedFile">{{ selectedFile.name }}</span>
+      </div>
+
+      <div *ngIf="inputMethod === 'manual'" class="manual-inputs">
+        <div class="manual-group">
+          <div>
+            <label>Nilai X</label>
+            <input type="number" *ngFor="let x of xValues; let i = index" [(ngModel)]="xValues[i]" name="x{{i}}" />
+          </div>
+          <div>
+            <label>Nilai Y</label>
+            <input type="number" *ngFor="let y of yValues; let i = index" [(ngModel)]="yValues[i]" name="y{{i}}" />
+          </div>
+        </div>
+      </div>
+
+      <label>Nilai Alpha</label>
+      <select>
+        <option disabled selected>Pilih nilai Alpha</option>
+        <option>0.01</option>
+        <option>0.05</option>
+        <option>0.10</option>
+      </select>
+
+      <button type="submit">Hitung</button>
+    </form>
+  </div>
+</main>
