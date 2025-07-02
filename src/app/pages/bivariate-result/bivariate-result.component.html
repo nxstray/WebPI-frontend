@@ -1,0 +1,123 @@
+<header class="navbar">
+  <button class="logo-btn" [routerLink]="['/']">
+    <img src="assets/logo-gunadarma.png" alt="Logo" class="logo-img" />
+    <b>Gunadarma Data Analysis Application</b>
+  </button>
+</header>
+
+<main class="bivariate-wrapper">
+  <div class="form-card table-card">
+    <h2 class="page-title">Hasil Korelasi Bivariate</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>X</th>
+          <th>Y</th>
+          <th>X²</th>
+          <th>Y²</th>
+          <th>XY</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of data; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ row.x }}</td>
+          <td>{{ row.y }}</td>
+          <td>{{ row.x * row.x }}</td>
+          <td>{{ row.y * row.y }}</td>
+          <td>{{ row.x * row.y }}</td>
+        </tr>
+        <tr class="total-row">
+          <td>Jumlah</td>
+          <td>{{ sumX }}</td>
+          <td>{{ sumY }}</td>
+          <td>{{ sumX2 }}</td>
+          <td>{{ sumY2 }}</td>
+          <td>{{ sumXY }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-card">
+    <h3>Detail Proyek</h3>
+    <hr><br>
+
+    <p><strong>Hipotesis Ho:</strong> {{ hasil?.ho }}</p>
+    <p><strong>Hipotesis Ha:</strong> {{ hasil?.ha }}</p>
+
+    <br><hr><br>
+    <h3>Koefisien Korelasi</h3>
+    <br>
+
+    <p><strong>Diketahui:</strong></p>
+    <table class="data-table">
+      <tr>
+        <th>ΣX</th>
+        <th>ΣY</th>
+        <th>ΣX²</th>
+        <th>ΣY²</th>
+        <th>ΣXY</th>
+        <th>n</th>
+      </tr>
+      <tr>
+        <td>{{ sumX }}</td>
+        <td>{{ sumY }}</td>
+        <td>{{ sumX2 }}</td>
+        <td>{{ sumY2 }}</td>
+        <td>{{ sumXY }}</td>
+        <td>{{ hasil?.n }}</td>
+      </tr>
+    </table>
+
+    <br>
+    <p><strong>Rumus:</strong></p>
+    <p [innerHTML]="rumusR"></p>
+
+    <br><hr><br>
+    <h3>Uji Signifikansi (Uji t)</h3>
+
+    <br>
+    <p><strong>Diketahui:</strong></p>
+    <table class="data-table">
+      <tr>
+        <th>r</th>
+        <th>n</th>
+      </tr>
+      <tr>
+        <td>{{ r }}</td>
+        <td>{{ hasil?.n }}</td>
+      </tr>
+    </table>
+
+    <br>
+    <p><strong>Rumus:</strong></p>
+    <p [innerHTML]="rumusT"></p>
+
+    <br><hr><br>
+    <h3>Koefisien Determinasi</h3>
+
+    <br>
+    <p><strong>Diketahui:</strong></p>
+    <table class="data-table">
+      <tr>
+        <th>r</th>
+      </tr>
+      <tr>
+        <td>{{ r }}</td>
+      </tr>
+    </table>
+
+    <br>
+    <p><strong>Rumus:</strong></p>
+    <p [innerHTML]="rumusR2"></p>
+
+    <br><hr><br>
+    <h3>Kesimpulan:</h3>
+    <p>
+      Karena t hitung ({{ tHitung.toFixed(3) }}) > t tabel (2.306), maka Ho ditolak dan Ha diterima.
+      Terdapat hubungan signifikan antara Durasi Pengiklanan dan Penjualan Barang sebesar {{ r }} dengan determinasi {{ (r * r * 100).toFixed(1) }}%.
+    </p>
+  </div>
+</main>
