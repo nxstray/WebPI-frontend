@@ -1,7 +1,7 @@
 <header class="navbar">
   <button class="logo-btn" [routerLink]="['/']">
     <img src="assets/logo-gunadarma.png" alt="Logo" class="logo-img" />
-    Universitas Gunadarma
+    <b>Gunadarma Data Analysis Application</b>
   </button>
 </header>
 
@@ -9,55 +9,64 @@
   <div class="form-card">
     <h2>Korelasi Bivariate <i>(Pearson)</i></h2>
 
-    <form>
+    <form (ngSubmit)="onSubmit()" #korelasiForm="ngForm">
       <label>Nama kasus</label>
-      <input type="text" placeholder="Masukkan nama kasus" />
+      <input type="text" name="namaKasus" [(ngModel)]="formData.namaKasus" required />
 
       <label>Nama variabel X</label>
-      <input type="text" placeholder="Masukkan variabel X" />
+      <input type="text" name="namaVarX" [(ngModel)]="formData.namaVarX" required />
 
       <label>Nama variabel Y</label>
-      <input type="text" placeholder="Masukkan variabel Y" />
+      <input type="text" name="namaVarY" [(ngModel)]="formData.namaVarY" required />
 
       <label>Ho</label>
-      <input type="text" placeholder="Masukkan hipotesis Ho" />
+      <input type="text" name="ho" [(ngModel)]="formData.ho" required />
 
       <label>Ha</label>
-      <input type="text" placeholder="Masukkan hipotesis Ha" />
+      <input type="text" name="ha" [(ngModel)]="formData.ha" required />
 
       <label>Cara input nilai variabel</label>
-      <select [(ngModel)]="inputMethod" name="inputMethod">
+      <select [(ngModel)]="inputMethod" name="inputMethod" required>
         <option value="">Pilih metode</option>
         <option value="excel">Import Excel</option>
         <option value="manual">Manual</option>
       </select>
 
-      <div *ngIf="inputMethod === 'excel'" class="upload-box" (click)="fileInput.click()">
+      <div *ngIf="inputMethod === 'excel'" class="upload-box" style="margin-top: 1rem;" (click)="fileInput.click()">
         <span class="upload-icon">📁</span>
         <p>Upload from computer</p>
         <input type="file" hidden (change)="onFileSelected($event)" #fileInput />
         <span *ngIf="selectedFile">{{ selectedFile.name }}</span>
       </div>
 
-      <div *ngIf="inputMethod === 'manual'" class="manual-inputs">
-        <div class="manual-group">
+      <div *ngIf="inputMethod === 'manual'" class="manual-inputs" style="margin-top: 1.5rem;">
+        <div class="manual-group" style="display: flex; gap: 2rem;">
           <div>
             <label>Nilai X</label>
-            <input type="number" *ngFor="let x of xValues; let i = index" [(ngModel)]="xValues[i]" name="x{{i}}" />
+            <div *ngFor="let x of xValues; let i = index" style="margin-bottom: 0.5rem;">
+              <input type="number" [name]="'x'+i" [ngModel]="x" (ngModelChange)="ubahNilaiX(i, $event)" />
+              <button type="button" (click)="hapusNilaiX(i)">✖</button>
+            </div>
+            <button type="button" (click)="tambahNilaiX()">+ Tambah Nilai X</button>
           </div>
+
           <div>
             <label>Nilai Y</label>
-            <input type="number" *ngFor="let y of yValues; let i = index" [(ngModel)]="yValues[i]" name="y{{i}}" />
+            <div *ngFor="let y of yValues; let i = index" style="margin-bottom: 0.5rem;">
+              <input type="number" [name]="'y'+i" [ngModel]="y" (ngModelChange)="ubahNilaiY(i, $event)" />
+              <button type="button" (click)="hapusNilaiY(i)">✖</button>
+            </div>
+            <button type="button" (click)="tambahNilaiY()">+ Tambah Nilai Y</button>
           </div>
         </div>
       </div>
 
-      <label>Nilai Alpha</label>
-      <select>
-        <option disabled selected>Pilih nilai Alpha</option>
-        <option>0.01</option>
-        <option>0.05</option>
-        <option>0.10</option>
+      <label style="margin-top: 1.5rem;">Nilai Alpha</label>
+      <select [(ngModel)]="formData.alpha" name="alpha" required>
+        <option value="" disabled>Pilih nilai Alpha</option>
+        <option [value]="0.01">0.01</option>
+        <option [value]="0.05">0.05</option>
+        <option [value]="0.10">0.10</option>
       </select>
 
       <button type="submit">Hitung</button>
