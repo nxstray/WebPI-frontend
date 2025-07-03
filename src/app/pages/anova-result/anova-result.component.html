@@ -1,0 +1,123 @@
+<header class="navbar">
+  <button class="logo-btn" [routerLink]="['/']">
+    <img src="assets/logo-gunadarma.png" alt="Logo" class="logo-img" />
+    <b>Gunadarma Data Analysis Application</b>
+  </button>
+</header>
+
+<main class="anova-wrapper">
+  <div class="form-card table-card">
+    <h2 class="page-title">Hasil Uji ANOVA</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Grup</th>
+          <th>Nilai</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of data; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ row.grup }}</td>
+          <td>{{ row.nilai }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-card">
+    <h3>Detail Proyek</h3>
+    <hr><br>
+    <p><strong>Hipotesis Ho:</strong> {{ hasil?.ho }}</p>
+    <p><strong>Hipotesis Ha:</strong> {{ hasil?.ha }}</p>
+    <p><strong>Alpha (α):</strong> {{ hasil?.alpha }}</p>
+
+    <br><hr><br>
+    <h3>Perhitungan ANOVA</h3>
+    <br>
+
+    <h4>Sum of Squares (SS)</h4>
+    <p><strong>Diketahui:</strong></p>
+    <table class="data-table">
+      <tr>
+        <th>SS Total</th>
+        <th>SS Antar</th>
+        <th>SS Dalam</th>
+      </tr>
+      <tr>
+        <td>{{ ssTotal }}</td>
+        <td>{{ ssAntar }}</td>
+        <td>{{ ssDalam }}</td>
+      </tr>
+    </table>
+    <p><strong>Rumus:</strong></p>
+    <p [innerHTML]="rumusSS"></p>
+
+    <br><hr><br>
+
+    <h4>Derajat Bebas (df)</h4>
+    <p><strong>Diketahui:</strong></p>
+    <table class="data-table">
+      <tr>
+        <th>df Total</th>
+        <th>df Antar</th>
+        <th>df Dalam</th>
+      </tr>
+      <tr>
+        <td>{{ dfTotal }}</td>
+        <td>{{ dfAntar }}</td>
+        <td>{{ dfDalam }}</td>
+      </tr>
+    </table>
+    <p><strong>Rumus:</strong></p>
+    <p [innerHTML]="rumusDF"></p>
+
+    <br><hr><br>
+
+    <h4>Mean Square (MS)</h4>
+    <p><strong>Diketahui:</strong></p>
+    <table class="data-table">
+      <tr>
+        <th>MS Antar</th>
+        <th>MS Dalam</th>
+      </tr>
+      <tr>
+        <td>{{ msAntar }}</td>
+        <td>{{ msDalam }}</td>
+      </tr>
+    </table>
+    <p><strong>Rumus:</strong></p>
+    <p [innerHTML]="rumusMS"></p>
+
+    <br><hr><br>
+
+    <h4>F-Ratio</h4>
+    <p><strong>Diketahui:</strong></p>
+    <table class="data-table">
+      <tr>
+        <th>F Hitung</th>
+        <th>F Tabel</th>
+      </tr>
+      <tr>
+        <td>{{ fHitung }}</td>
+        <td>{{ fTabel }}</td>
+      </tr>
+    </table>
+    <p><strong>Rumus:</strong></p>
+    <p [innerHTML]="rumusF"></p>
+
+    <br><hr><br>
+
+    <h4>Nilai p</h4>
+    <p><strong>p-value:</strong> {{ pValue }}</p>
+
+    <br><hr><br>
+
+    <h3>Kesimpulan:</h3>
+    <p>
+      Karena F hitung ({{ fHitung }}) {{ fHitung > fTabel ? '>' : '<=' }} F tabel ({{ fTabel }}),
+      maka Ho {{ fHitung > fTabel ? 'ditolak' : 'tidak ditolak' }} dan Ha {{ fHitung > fTabel ? 'diterima' : 'tidak diterima' }}.
+    </p>
+  </div>
+</main>
