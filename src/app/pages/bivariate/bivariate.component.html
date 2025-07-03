@@ -19,12 +19,6 @@
       <label>Nama variabel Y</label>
       <input type="text" name="namaVarY" [(ngModel)]="formData.namaVarY" required />
 
-      <label>Ho</label>
-      <input type="text" name="ho" [(ngModel)]="formData.ho" required />
-
-      <label>Ha</label>
-      <input type="text" name="ha" [(ngModel)]="formData.ha" required />
-
       <label>Cara input nilai variabel</label>
       <select [(ngModel)]="inputMethod" name="inputMethod" required>
         <option value="">Pilih metode</option>
@@ -35,7 +29,7 @@
       <div *ngIf="inputMethod === 'excel'" class="upload-box" style="margin-top: 1rem;" (click)="fileInput.click()">
         <span class="upload-icon">📁</span>
         <p>Upload from computer</p>
-        <input type="file" hidden (change)="onFileSelected($event)" #fileInput />
+        <input type="file" hidden (change)="onFileSelected($event)" accept=".xlsx, .xls" #fileInput />
         <span *ngIf="selectedFile">{{ selectedFile.name }}</span>
       </div>
 
