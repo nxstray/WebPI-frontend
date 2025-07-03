@@ -6,8 +6,6 @@ export interface KorelasiDTO {
   namaKasus: string;
   namaVarX: string;
   namaVarY: string;
-  ho: string;
-  ha: string;
   alpha: number;
   inputMethod: string;
   xValues: number[];
@@ -19,8 +17,6 @@ export interface KorelasiResponseDTO {
   namaKasus: string;
   namaVarX: string;
   namaVarY: string;
-  ho: string;
-  ha: string;
   alpha: number;
   n: number;
   xvalues: number[];
