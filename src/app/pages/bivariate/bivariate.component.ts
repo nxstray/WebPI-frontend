@@ -2,10 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import {
-  KorelasiDTO,
-  KorelasiService
-} from '../../services/korelasi.service';
+import { KorelasiDTO, KorelasiService } from '../../services/korelasi.service';
+
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-bivariate',
@@ -18,15 +17,13 @@ export class BivariateComponent {
   inputMethod = '';
   selectedFile: File | null = null;
 
-  xValues: number[] = [0, 0, 0];
-  yValues: number[] = [0, 0, 0];
+  xValues: number[] = [];
+  yValues: number[] = [];
 
   formData: Partial<KorelasiDTO> = {
     namaKasus: '',
     namaVarX: '',
     namaVarY: '',
-    ho: '',
-    ha: '',
     alpha: 0.05,
     inputMethod: ''
   };
@@ -40,6 +37,32 @@ export class BivariateComponent {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
       this.selectedFile = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+        this.xValues = [];
+        this.yValues = [];
+
+        for (let i = 1; i < json.length; i++) {
+          const row = json[i] as any[];
+          const x = parseFloat(row[0]);
+          const y = parseFloat(row[1]);
+
+          if (!isNaN(x) && !isNaN(y)) {
+            this.xValues.push(x);
+            this.yValues.push(y);
+          }
+        }
+      };
+
+      reader.readAsArrayBuffer(this.selectedFile);
     }
   }
 
@@ -79,8 +102,6 @@ export class BivariateComponent {
       namaKasus: this.formData.namaKasus || '',
       namaVarX: this.formData.namaVarX || '',
       namaVarY: this.formData.namaVarY || '',
-      ho: this.formData.ho || '',
-      ha: this.formData.ha || '',
       alpha: this.formData.alpha || 0.05,
       inputMethod: this.inputMethod,
       xValues: this.xValues,
@@ -91,7 +112,7 @@ export class BivariateComponent {
       const id = res?.idKorelasi;
       this.korelasiService.getKorelasiById(id).subscribe((hasil) => {
         this.korelasiService.currentResult = hasil;
-        this.router.navigate(['/result']);
+        this.router.navigate(['/result-bivariate']);
       });
     });
   }
