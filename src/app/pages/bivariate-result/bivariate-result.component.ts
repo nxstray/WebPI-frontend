@@ -106,9 +106,12 @@ export class BivariateResultComponent implements OnInit, AfterViewChecked {
   get rumusR(): string {
     const n = this.hasil?.n ?? 0;
     return `\\[
-      r = \\frac{${n} \\times ${this.sumXY} - ${this.sumX} \\times ${this.sumY}}
-      {\\sqrt{(${n} \\times ${this.sumX2} - ${this.sumX}^2)(${n} \\times ${this.sumY2} - ${this.sumY}^2)}}
-      = ${this.r}
+      r = \\frac{n \\cdot \\sum XY - \\sum X \\cdot \\sum Y}
+      {\\sqrt{(n \\cdot \\sum X^2 - (\\sum X)^2)(n \\cdot \\sum Y^2 - (\\sum Y)^2)}}
+    \\]
+    \\[
+      r = \\frac{${n} \\cdot ${this.sumXY} - ${this.sumX} \\cdot ${this.sumY}}
+      {\\sqrt{(${n} \\cdot ${this.sumX2} - ${this.sumX}^2)(${n} \\cdot ${this.sumY2} - ${this.sumY}^2)}} = ${this.r}
     \\]`;
   }
 
@@ -116,14 +119,17 @@ export class BivariateResultComponent implements OnInit, AfterViewChecked {
     const n = this.hasil?.n ?? 0;
     const df = n - 2;
     return `\\[
-      t = \\frac{${this.r} \\times \\sqrt{${df}}}{\\sqrt{1 - ${this.r}^2}} = ${this.tHitung}
+      t = \\frac{r \\cdot \\sqrt{n - 2}}{\\sqrt{1 - r^2}}
+    \\]
+    \\[
+      t = \\frac{${this.r} \\cdot \\sqrt{${df}}}{\\sqrt{1 - ${this.r}^2}} = ${this.tHitung}
     \\]`;
   }
 
   get rumusR2(): string {
     const r2 = this.r * this.r;
     return `\\[
-      R^2 = ${this.r}^2 = ${r2.toFixed(3)} \\Rightarrow ${(r2 * 100).toFixed(1)}\\%
+      R^2 = ${this.r}^2 = ${r2.toFixed(3)} = ${(r2 * 100).toFixed(1)}\\%
     \\]`;
   }
 
