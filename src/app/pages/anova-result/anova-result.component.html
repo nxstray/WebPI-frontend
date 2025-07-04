@@ -7,7 +7,7 @@
 
 <main class="anova-wrapper">
   <div class="form-card table-card">
-    <h2 class="page-title">Hasil Uji ANOVA</h2>
+    <h2 class="page-title">Tabel data uji ANOVA</h2>
     <table>
       <thead>
         <tr>
@@ -28,17 +28,33 @@
 
   <div class="form-card">
     <h3>Detail Proyek</h3>
+
     <hr><br>
-    <p><strong>Hipotesis Ho:</strong> {{ hasil?.ho }}</p>
-    <p><strong>Hipotesis Ha:</strong> {{ hasil?.ha }}</p>
-    <p><strong>Alpha (α):</strong> {{ hasil?.alpha }}</p>
+    <p><strong>Hipotesis Ho :</strong> {{ hoText }}</p>
+    <p><strong>Hipotesis Ha :</strong> {{ haText }}</p>
 
     <br><hr><br>
-    <h3>Perhitungan ANOVA</h3>
-    <br>
 
-    <h4>Sum of Squares (SS)</h4>
-    <p><strong>Diketahui:</strong></p>
+    <h4>Diketahui</h4>
+    <table class="data-table">
+      <tr>
+        <th>n (jumlah data)</th>
+        <th>k (jumlah grup)</th>
+        <th>Grand Mean</th>
+      </tr>
+      <tr>
+        <td>{{ dfTotal + 1 }}</td>
+        <td>{{ dfAntar + 1 }}</td>
+        <td>{{ grandMean.toFixed(2) }}</td>
+      </tr>
+    </table>
+
+    <br><hr><br>
+
+    <h3>Sum of Squares (SS)</h3>
+
+    <br>
+    <h4>Diketahui</h4>
     <table class="data-table">
       <tr>
         <th>SS Total</th>
@@ -51,13 +67,17 @@
         <td>{{ ssDalam }}</td>
       </tr>
     </table>
-    <p><strong>Rumus:</strong></p>
+
+    <br>
+    <h4>Rumus</h4>
     <p [innerHTML]="rumusSS"></p>
 
     <br><hr><br>
 
-    <h4>Derajat Bebas (df)</h4>
-    <p><strong>Diketahui:</strong></p>
+    <h3>Derajat Bebas (df)</h3>
+
+    <br>
+    <h4>Diketahui</h4>
     <table class="data-table">
       <tr>
         <th>df Total</th>
@@ -70,13 +90,17 @@
         <td>{{ dfDalam }}</td>
       </tr>
     </table>
-    <p><strong>Rumus:</strong></p>
+
+    <br>
+    <h4>Rumus</h4>
     <p [innerHTML]="rumusDF"></p>
 
     <br><hr><br>
 
-    <h4>Mean Square (MS)</h4>
-    <p><strong>Diketahui:</strong></p>
+    <h3>Mean Square (MS)</h3>
+
+    <br>
+    <h4>Diketahui</h4>
     <table class="data-table">
       <tr>
         <th>MS Antar</th>
@@ -87,13 +111,17 @@
         <td>{{ msDalam }}</td>
       </tr>
     </table>
-    <p><strong>Rumus:</strong></p>
+
+    <br>
+    <h4>Rumus</h4>
     <p [innerHTML]="rumusMS"></p>
 
     <br><hr><br>
 
-    <h4>F-Ratio</h4>
-    <p><strong>Diketahui:</strong></p>
+    <h3>F-Ratio</h3>
+
+    <br>
+    <h4>Diketahui</h4>
     <table class="data-table">
       <tr>
         <th>F Hitung</th>
@@ -104,7 +132,9 @@
         <td>{{ fTabel }}</td>
       </tr>
     </table>
-    <p><strong>Rumus:</strong></p>
+
+    <br>
+    <h4>Rumus</h4>
     <p [innerHTML]="rumusF"></p>
 
     <br><hr><br>
@@ -117,7 +147,10 @@
     <h3>Kesimpulan:</h3>
     <p>
       Karena F hitung ({{ fHitung }}) {{ fHitung > fTabel ? '>' : '<=' }} F tabel ({{ fTabel }}),
-      maka Ho {{ fHitung > fTabel ? 'ditolak' : 'tidak ditolak' }} dan Ha {{ fHitung > fTabel ? 'diterima' : 'tidak diterima' }}.
+      maka dapat disimpulkan bahwa {{ fHitung > fTabel ? 'terdapat perbedaan yang signifikan antar kelompok.' : 'tidak terdapat perbedaan yang signifikan antar kelompok.' }}
     </p>
+
+    <br>
+    <app-box-plot [data]="data" [yAxisLabel]="hasil?.namaVarY || 'Nilai'"></app-box-plot>
   </div>
 </main>

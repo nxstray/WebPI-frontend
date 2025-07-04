@@ -9,24 +9,15 @@
   <div class="form-card">
     <h2>Uji ANOVA <i>(One-Way)</i></h2>
 
-    <form>
+    <form (ngSubmit)="onSubmit()">
       <label>Nama kasus</label>
-      <input type="text" placeholder="Masukkan nama kasus" />
+      <input type="text" name="namaKasus" [(ngModel)]="formData.namaKasus" required/>
 
       <label>Nama variabel dependen</label>
-      <input type="text" placeholder="Misal: Nilai, Berat Badan, dsb." />
-
-      <label>Nama kelompok</label>
-      <input type="text" placeholder="Misal: Kelas A, Kelas B, Kelas C" />
-
-      <label>Ho</label>
-      <input type="text" placeholder="Misal: Semua rata-rata kelompok sama" />
-
-      <label>Ha</label>
-      <input type="text" placeholder="Misal: Ada perbedaan minimal satu kelompok" />
+      <input type="text" name="namaKasus" [(ngModel)]="formData.namaVariabelDependen" required/>
 
       <label>Cara input nilai</label>
-      <select [(ngModel)]="anovaInputMethod" name="anovaInputMethod">
+      <select name="anovaInputMethod" [(ngModel)]="anovaInputMethod" required>
         <option value="">Pilih metode</option>
         <option value="excel">Import Excel</option>
         <option value="manual">Manual</option>
@@ -35,7 +26,7 @@
       <div *ngIf="anovaInputMethod === 'excel'" class="upload-box" (click)="fileInput.click()">
         <span class="upload-icon">📁</span>
         <p>Upload from computer</p>
-        <input type="file" hidden (change)="onAnovaFileSelected($event)" #fileInput />
+        <input id="excelUpload" name="excelUpload" type="file" hidden (change)="onAnovaFileSelected($event)" #fileInput />
         <span *ngIf="selectedAnovaFile">{{ selectedAnovaFile.name }}</span>
       </div>
 
@@ -43,19 +34,23 @@
         <label>Masukkan data tiap kelompok</label>
         <div class="manual-group" *ngFor="let group of manualGroups; let i = index">
           <div>
-            <label>Kelompok {{ i + 1 }}</label>
-            <input type="number" *ngFor="let value of group.values; let j = index" [(ngModel)]="group.values[j]" name="g{{i}}val{{j}}" />
+            <label for="groupName{{i}}">Kelompok {{ i + 1 }}</label>
+            <input id="groupName{{i}}" name="groupName{{i}}" type="text" placeholder="Nama kelompok" [(ngModel)]="group.nama" />
+            <input *ngFor="let value of group.values; let j = index"
+                   id="g{{i}}val{{j}}" name="g{{i}}val{{j}}"
+                   type="number"
+                   [(ngModel)]="group.values[j]" />
           </div>
         </div>
         <button type="button" (click)="addGroup()">+ Tambah Kelompok</button>
       </div>
 
-      <label>Nilai Alpha</label>
-      <select>
+      <label for="alpha">Nilai Alpha</label>
+      <select id="alpha" name="alpha" [(ngModel)]="formData.alpha">
         <option disabled selected>Pilih nilai Alpha</option>
-        <option>0.01</option>
-        <option>0.05</option>
-        <option>0.10</option>
+        <option [value]="0.01">0.01</option>
+        <option [value]="0.05">0.05</option>
+        <option [value]="0.10">0.10</option>
       </select>
 
       <button type="submit">Hitung</button>

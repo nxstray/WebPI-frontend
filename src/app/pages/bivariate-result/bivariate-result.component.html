@@ -44,14 +44,14 @@
     <h3>Detail Proyek</h3>
     <hr><br>
 
-    <p><strong>Hipotesis Ho:</strong> {{ hoText }}</p>
-    <p><strong>Hipotesis Ha:</strong> {{ haText }}</p>
+    <p><strong>Hipotesis Ho :</strong> {{ hoText }}</p>
+    <p><strong>Hipotesis Ha :</strong> {{ haText }}</p>
 
     <br><hr><br>
     <h3>Koefisien Korelasi</h3>
     <br>
 
-    <p><strong>Diketahui:</strong></p>
+    <p><strong>Diketahui</strong></p>
     <table class="data-table">
       <tr>
         <th>ΣX</th>
@@ -72,14 +72,14 @@
     </table>
 
     <br>
-    <p><strong>Rumus:</strong></p>
+    <p><strong>Rumus</strong></p>
     <p [innerHTML]="rumusR"></p>
 
     <br><hr><br>
     <h3>Uji Signifikansi (Uji t)</h3>
 
     <br>
-    <p><strong>Diketahui:</strong></p>
+    <p><strong>Diketahui</strong></p>
     <table class="data-table">
       <tr>
         <th>r</th>
@@ -92,14 +92,14 @@
     </table>
 
     <br>
-    <p><strong>Rumus:</strong></p>
+    <p><strong>Rumus</strong></p>
     <p [innerHTML]="rumusT"></p>
 
     <br><hr><br>
     <h3>Koefisien Determinasi</h3>
 
     <br>
-    <p><strong>Diketahui:</strong></p>
+    <p><strong>Diketahui</strong></p>
     <table class="data-table">
       <tr>
         <th>r</th>
@@ -110,17 +110,17 @@
     </table>
 
     <br>
-    <p><strong>Rumus:</strong></p>
+    <p><strong>Rumus</strong></p>
     <p [innerHTML]="rumusR2"></p>
 
     <br><hr><br>
-    <h3>Kesimpulan:</h3>
+    <h3>Kesimpulan</h3>
     <p>
       Karena t hitung ({{ tHitung }}) {{tHitung > tTabel ? '>' : '<=' }} t tabel ({{ tTabel }}), maka Ho {{ tHitung > tTabel ? 'ditolak' : 'diterima' }} dan Ha {{ tHitung > tTabel ? 'diterima' : 'ditolak' }}.
       {{ tHitung > tTabel ? 'Terdapat hubungan signifikan' : 'Tidak terdapat hubungan signifikan' }} antara {{ varX }} dan {{ varY }} sebesar {{ r }} dengan determinasi {{ (r * r * 100).toFixed(1) }}%.
     </p>
 
     <br>
-    <app-scatter-plot [xValues]="xValues" [yValues]="yValues"></app-scatter-plot>
+    <app-scatter-plot [xValues]="xValues || []" [yValues]="yValues || []"></app-scatter-plot>
   </div>
 </main>
