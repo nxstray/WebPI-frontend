@@ -5,8 +5,6 @@ import { Observable } from 'rxjs';
 export interface AnovaDTO {
   namaKasus: string;
   namaVariabelDependen: string;
-  ho: string;
-  ha: string;
   alpha: number;
   inputMethod: string;
   namaGrup: string[];
@@ -22,8 +20,6 @@ export interface AnovaResponseDTO {
   idAnova: number;
   namaKasus: string;
   namaVarY: string;
-  ho: string;
-  ha: string;
   alpha: number;
   inputMethod: string;
   grups: GrupDTO[];
