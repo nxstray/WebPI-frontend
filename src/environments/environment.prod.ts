@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://webpi-backend-production.up.railway.app/api'
+  apiUrl: process.env['NG_ENV_API_URL'] || 'https://webpi-backend-production.up.railway.app/api'
 };
