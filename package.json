@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:frontend": "node dist/frontend/server/server.mjs",
-    "vercel-build": "ng build --configuration production && ng run frontend:server:production"
+    "vercel-build": "ng build frontend --configuration=production"
   },
   "private": true,
   "dependencies": {
