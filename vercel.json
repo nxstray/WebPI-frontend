@@ -1,6 +1,14 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "outputDirectory": "dist/frontend"
+  "builds": [
+    {
+      "src": "dist/frontend/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
