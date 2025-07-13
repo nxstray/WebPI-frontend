@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface AnovaDTO {
   namaKasus: string;
@@ -29,7 +30,7 @@ export interface AnovaResponseDTO {
   providedIn: 'root'
 })
 export class AnovaService {
-  private apiUrl = 'http://localhost:6060/api/anova';
+  private apiUrl = `${environment.apiUrl}/anova`;
 
   currentResult: AnovaResponseDTO | null = null;
 

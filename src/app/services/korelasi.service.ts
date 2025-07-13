@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface KorelasiDTO {
   namaKasus: string;
@@ -25,7 +26,7 @@ export interface KorelasiResponseDTO {
 
 @Injectable({ providedIn: 'root' })
 export class KorelasiService {
-  private apiUrl = 'http://localhost:6060/api/korelasi';
+  private apiUrl = `${environment.apiUrl}/korelasi`;
 
   currentResult: KorelasiResponseDTO | null = null;
 
