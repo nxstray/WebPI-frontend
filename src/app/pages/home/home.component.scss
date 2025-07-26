@@ -1,112 +1,142 @@
+/* Mengatur elemen host agar menempati seluruh viewport */
 :host {
   display: block;
   height: 100vh;
   width: 100vw;
   margin: 0;
   padding: 0;
-  font-family: "Atkinson Hyperlegible Next", sans-serif;
+  font-family: 'Roboto Mono', monospace;
+  background-color: #f5f5f5;
+  color: #1a1a1a;
 }
 
-body, html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-
+/* Gaya untuk elemen navbar yang tetap di atas layar */
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: rgba(243, 243, 243, 0.168);
-  color: #e2dede;
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  background-color: #fff;
+  border: 4px solid #000;
+  box-shadow: 8px 8px 0 #000000;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
 
-  .logo {
-    display: flex;
-    align-items: center;
-    font-size: 1.2rem;
+  /* Logo universitas */
+  .logo-img {
+    height: 48px;
   }
 
-  .logo-img {
-    height: 40px;
-    margin-right: 0.3rem;
-    margin-bottom: 0.5rem;
+  /* Teks di sebelah logo */
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: bold;
+    line-height: 1;
+    transform: translateY(2px);
   }
 }
 
+/* Bagian hero (section utama halaman) */
 .hero {
-  height: 100vh;
+  min-height: 100vh;
   padding: 6rem 2rem 2rem;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  color: #f3e3e3a9;
-  background: linear-gradient(-45deg, #e1c2f6, #b36ef3, #b96cba, #e7816a);
   background-size: 400% 400%;
   animation: gradientBG 15s ease infinite;
+}
 
-  h1 {
-    font-size: 4.5rem;
+/* Kartu utama berisi konten */
+.container-card {
+  background-color: #fff;
+  border: 4px solid #000;
+  box-shadow: 8px 8px 0 #000000;
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Bagian header dari kartu */
+.card-header {
+  background-color: #b7e790;
+  padding: 1rem 1.5rem;
+  border-bottom: 4px solid #000;
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    margin: 0;
+  }
+}
+
+/* Bagian isi dari kartu */
+.card-body {
+  padding: 2rem;
+  text-align: center;
+
+  /* Judul utama dengan animasi ketik */
+  .neo-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.1rem;
+    letter-spacing: 2px;
     margin-bottom: 1rem;
-
-    .typewriter {
-      display: inline-block;
-      overflow: hidden;
-      white-space: nowrap;
-      border-right: 2px solid rgba(255, 255, 255, 0.75);
-      animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
-      max-width: 100%;
-    }
+    border-right: 2px solid rgba(0, 0, 0, 0.75);
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
   }
 
-  p {
+  /* Deskripsi hero */
+  .hero-desc {
+    font-family: 'Bebas Neue', sans-serif;
     max-width: 600px;
-    margin-bottom: 2rem;
-    font-size: 1.2rem;
+    margin: 0 auto 2rem;
+    font-size: 1.1rem;
+    color: #333;
   }
 
+  /* Kelompok tombol pilihan metode analisis */
   .button-group {
     display: flex;
-    gap: 1rem;
     flex-wrap: wrap;
+    gap: 1rem;
     justify-content: center;
-  }
 
-  .download-btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #7c14c6;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    /* Gaya untuk tombol navigasi */
+    .btn-route {
+      background-color: #ffd166;
+      color: #000;
+      border: 4px solid #000;
+      box-shadow: 6px 6px 0 #000;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.75rem 1.5rem;
+      transition: all 0.2s ease;
+      border-radius: 0;
 
-    &:hover {
-      background-color: #e2e2e2be;
+      /* Efek hover tombol */
+      &:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 4px 4px 0 #000;
+        background-color: #ff966c;
+      }
+
+      /* Efek saat tombol ditekan */
+      &:active {
+        transform: translate(0, 0);
+        box-shadow: 2px 2px 0 #000;
+      }
     }
   }
 }
 
-@keyframes gradientBG {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
+/* Animasi mengetik untuk judul utama */
 @keyframes typing {
   from {
     width: 0;
@@ -116,11 +146,12 @@ body, html {
   }
 }
 
+/* Animasi blinking untuk kursor ketik */
 @keyframes blink-caret {
   0%, 100% {
     border-color: transparent;
   }
   50% {
-    border-color: rgba(200, 194, 194, 0.75);
+    border-color: rgba(0, 0, 0, 0.75);
   }
 }

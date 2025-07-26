@@ -1,17 +1,37 @@
 <header class="navbar">
-  <div class="logo">
-    <img src="assets/logo-gunadarma.png" alt="Logo" class="logo-img" />
-    <b>Gunadarma Data Analysis Application</b>
-  </div>
+  <img src="assets/logo-gunadarma.png" alt="Logo" class="logo-img" />
+  <span class="logo-text">Gunadarma Data Analysis Application</span>
 </header>
 
+<!-- Bagian Hero Section / Halaman Utama -->
 <section class="hero">
-  <h1><span class="typewriter">Let us help with your assignments!</span></h1>
-  <p>
-    This website assists you in solving data analysis using <i>Bivariate Pearson</i> and <i>One-Way Analysis of variance</i>.
-  </p>
-  <div class="button-group">
-    <button class="download-btn" [routerLink]="['/bivariate']"><i>Bivariate Pearson</i></button>
-    <button class="download-btn" [routerLink]="['/anova']"><i>One way Analysis of variance</i></button>
+  <div class="container-card">
+    
+    <!-- Header pada Kartu -->
+    <div class="card-header">
+      <h2>Hello, folks</h2>
+    </div>
+    
+    <!-- Isi dari Kartu -->
+    <div class="card-body">
+      <!-- Judul Utama -->
+      <h1 class="neo-title">Let us help with your assignments!</h1>
+      
+      <!-- Deskripsi Singkat -->
+      <p class="hero-desc">
+        This website assists you in solving data analysis using
+        <i>Bivariate Pearson</i> and <i>One-Way Analysis of Variance</i>.
+      </p>
+      
+      <!-- Tombol Navigasi Menu -->
+      <div class="button-group">
+        <!-- Tombol menuju fitur Bivariate Pearson -->
+        <button class="btn-route" [routerLink]="['/bivariate']">Bivariate Pearson</button>
+        
+        <!-- Tombol menuju fitur One Way ANOVA -->
+        <button class="btn-route" [routerLink]="['/anova']">One Way ANOVA</button>
+      </div>
+
+    </div>
   </div>
 </section>

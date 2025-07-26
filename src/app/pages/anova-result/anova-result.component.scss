@@ -1,128 +1,151 @@
 :host {
   display: block;
-  min-height: 100vh;
+  min-height: 100vh; // Full page height
   width: 100%;
-  font-family: "Atkinson Hyperlegible Next", sans-serif;
-  background: linear-gradient(-45deg, #e1c2f6, #b36ef3, #b96cba, #e7816a);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
+  background-color: white;
 }
 
+/* Navbar dengan shadow dan border tebal */
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: rgba(250, 250, 250, 0.2);
-  color: #e2dede;
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  background-color: #fff;
+  border: 4px solid #000;
+  box-shadow: 8px 8px 0 #000;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
 
   .logo-btn {
     display: flex;
     align-items: center;
-    font-size: 1.2rem;
     background: none;
     border: none;
-    color: inherit;
     cursor: pointer;
     padding: 0;
+  }
 
-    &:hover {
-      opacity: 0.9;
-    }
+  .logo-img {
+    height: 48px;
+  }
 
-    .logo-img {
-      height: 40px;
-      margin-right: 0.3rem;
-      margin-bottom: 0.5rem;
-    }
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: bold;
+    transform: translateY(2px);
+    margin-left: 1rem;
   }
 }
 
-.anova-wrapper {
+/* Dashboard layout utama */
+.dashboard {
+  width: 90%;
+  max-width: 1200px;
+  margin: 7rem auto 2rem; // spacing bawah navbar
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 7rem 1rem 2rem;
-  gap: 2rem;
+  gap: 20px;
+  background: #fff;
+  padding: 20px;
 }
 
-.page-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  text-align: center;
-  color: #333;
+/* Grid fleksibel untuk komponen di dalam dashboard */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.form-card {
-  background: rgba(255, 255, 255, 0.85);
-  border-radius: 1rem;
-  padding: 2rem;
-  width: 100%;
-  max-width: 960px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  animation: fadeIn 0.6s ease;
-}
-
+/* Responsive card layout */
 .table-card {
-  overflow-x: auto;
+  flex: 2 1 600px;
+}
+.row-1 > .card:not(.table-card) {
+  flex: 1 1 300px;
+}
+.row-2 > .card {
+  flex: 1 1 300px;
 }
 
+.card.visualisasi {
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Styling kotak */
+.dashboard > div,
+.card {
+  background: #fff;
+  border: 3px solid #c084f5;
+  padding: 20px;
+  box-shadow: 5px 5px 0 #c084f5;
+  border-radius: 8px;
+}
+
+/* Headings */
+.page-title, h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #4a148c;
+}
+
+/* Table styling */
 table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.95rem;
-  background-color: rgba(255, 255, 255, 0.95);
   border-radius: 8px;
-  overflow: hidden;
 }
-
 th, td {
-  border: 1px solid #e2ccf3;
+  border: 2px solid #e2ccf3;
   padding: 0.6rem 0.8rem;
   text-align: center;
 }
-
 thead {
-  background-color: #dec5f0;
+  background-color: #d1a2f7;
+  color: #000;
+}
+tr:nth-child(odd) {
+  background-color: #f9f0ff;
+}
+
+.total-row {
   font-weight: bold;
+  background-color: #eee0fb;
 }
 
-.data-table {
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
+/* Hypothesis and formula styling */
+.hipotesis {
+  margin-top: 1rem;
+}
+.rumus-mathjax p {
+  font-size: 0.85rem;
+  overflow-wrap: break-word;
 }
 
-hr {
-  border: none;
-  height: 1px;
-  background-color: #ccc;
-  margin: 1rem 0;
-}
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
 
-@keyframes gradientBG {
-  0% {
-    background-position: 0% 50%;
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+  .logo-btn {
+    margin-bottom: 0.5rem;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .card.visualisasi {
+    max-width: 100%;
   }
 }

@@ -1,162 +1,212 @@
+// Komponen utama host, digunakan untuk menyetel gaya dasar halaman
 :host {
   display: block;
   min-height: 100vh;
   width: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: "Atkinson Hyperlegible Next", sans-serif;
+  font-family: 'Roboto Mono', monospace;
+  background-color: #ffffff;
+  color: #1a1a1a;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-
+// Gaya untuk navbar yang menempel di atas halaman
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: rgba(243, 243, 243, 0.168);
-  color: #e2dede;
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 10;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
+  background-color: #fff;
+  border: 4px solid #000;
+  box-shadow: 8px 8px 0 #000;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
 
+  // Tombol logo (berisi gambar/logo dan teks)
   .logo-btn {
     display: flex;
     align-items: center;
-    font-size: 1.2rem;
     background: none;
     border: none;
-    color: inherit;
     cursor: pointer;
     padding: 0;
-
-    &:hover {
-      opacity: 0.9;
-    }
   }
 
+  // Gambar logo
   .logo-img {
-    height: 40px;
-    margin-right: 0.3rem;
-    margin-bottom: 0.5rem;
+    height: 48px;
+  }
+
+  // Teks logo di sebelah gambar
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: bold;
+    line-height: 1;
+    transform: translateY(2px);
+    margin-left: 1rem;
   }
 }
 
-.bivariate-wrapper {
+// Container utama halaman anova
+.anova-container {
+  padding-top: 8rem;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding: 6rem 1rem 2rem;
-  min-height: 100vh;
-  background: linear-gradient(-45deg, #e1c2f6, #b36ef3, #b96cba, #e7816a);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
+  background-color: #ffffff;
+  min-height: calc(100vh - 8rem);
 }
 
+// Kartu/form input utama
 .form-card {
-  background: #ded9d9a8;
-  border-radius: 1rem;
+  background: #fff;
+  border: 4px solid #000;
+  box-shadow: 8px 8px 0 #000;
   padding: 2rem;
   width: 100%;
-  max-width: 550px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
   animation: fadeIn 0.6s ease;
+
+  // Judul form
+  h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  // Formulir input data
+  form {
+    display: flex;
+    flex-direction: column;
+
+    // Label input
+    label {
+      margin-bottom: 0.3rem;
+      font-weight: bold;
+    }
+
+    // Input dan select styling
+    input,
+    select {
+      margin-bottom: 1rem;
+      padding: 0.75rem 1rem;
+      border: 2px solid #000;
+      background-color: #f9f9f9;
+      font-size: 1rem;
+    }
+
+    // Tombol submit
+    button[type='submit'] {
+      background-color: #65c9ff;
+      color: #000;
+      border: 4px solid #000;
+      box-shadow: 6px 6px 0 #000;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.75rem 1.5rem;
+      transition: all 0.2s ease;
+      border-radius: 0;
+
+      // Hover styling untuk tombol submit
+      &:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 4px 4px 0 #000;
+        background-color: #f8f8f8;
+      }
+
+      // Active (saat ditekan)
+      &:active {
+        transform: translate(0, 0);
+        box-shadow: 2px 2px 0 #000;
+      }
+    }
+
+    // Tombol tambahan (misal: reset, tambah input manual, dll)
+    button[type='button'] {
+      background: none;
+      border: 2px dashed #000;
+      padding: 0.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      // Hover efek
+      &:hover {
+        background-color: #b7e790;
+      }
+    }
+  }
 }
 
-.form-card h2 {
-  text-align: center;
+// Kotak notifikasi validasi error
+.notif-box.error {
+  background-color: #ff595e;
+  color: #000000;
+  border: 4px solid #000;
+  padding: 1rem;
   margin-bottom: 1.5rem;
-  color: #333;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 6px 6px 0 #000;
+  animation: shake 0.3s ease-in-out 0s 2;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-
-  label {
-    margin-bottom: 0.3rem;
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: #444;
-  }
-
-  input,
-  select {
-    margin-bottom: 1rem;
-    padding: 0.75rem 1rem;
-    border: 1px solid #b3b3b3;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border 0.3s ease;
-
-    &:focus {
-      border-color: #7b4ad1;
-      outline: none;
-    }
-  }
-
-  button[type="submit"] {
-    padding: 0.75rem;
-    font-size: 1rem;
-    background-color: #7b4ad1;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 1rem;
-
-    &:hover {
-      background-color: #5a2dbd;
-    }
-  }
-
-  button[type="button"] {
-    background-color: transparent;
-    color: #7b4ad1;
-    border: 1px dashed #7b4ad1;
-    padding: 0.5rem;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 1rem;
-    width: fit-content;
-
-    &:hover {
-      background-color: #f2ecff;
-    }
-  }
+.notif-box.success {
+  background-color: #80e880;
+  color: #000000;
+  border: 4px solid #000;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+  box-shadow: 6px 6px 0 #000;
+  animation: fadeIn 0.5s ease;
 }
 
+// Animasi shake untuk efek error validasi
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+/* Efek fade in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// Area upload file excel
 .upload-box {
-  background-color: #f8f8f8;
-  border: 2px dashed #aaa;
-  border-radius: 8px;
+  background-color: #f9f9f9;
+  border: 2px dashed #000;
   padding: 1rem;
   text-align: center;
   cursor: pointer;
   margin-bottom: 1rem;
-  color: #555;
+  color: #000;
 
+  // Ikon upload
   .upload-icon {
     font-size: 2rem;
-    color: #666;
     display: block;
     margin-bottom: 0.5rem;
   }
 
+  // Deskripsi upload
   p {
     margin: 0.5rem 0;
-    font-size: 0.95rem;
+    font-weight: bold;
   }
 
+  // Keterangan tambahan
   span {
     font-size: 0.85rem;
     display: block;
@@ -164,61 +214,89 @@ form {
   }
 }
 
+// Kontainer untuk input manual
 .manual-inputs {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
+  gap: 1rem;
 
-  label {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #444;
-  }
-
+  // Setiap grup input manual
   .manual-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    border: 2px dashed #000;
+    padding: 1rem;
     margin-bottom: 1rem;
+    position: relative;
+    background-color: #f8f8f8;
 
-    div {
-      background-color: #f3f3f3;
-      padding: 0.75rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+    // Header untuk masing-masing grup
+    .group-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-      label {
-        font-weight: 500;
-        font-size: 0.9rem;
-        margin-bottom: 0.4rem;
-        display: block;
-        color: #555;
+    // Tombol hapus grup
+    .hapus-grup-btn {
+      background: none;
+      border: 2px dashed #000;
+      padding: 0.25rem 0.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.9rem;
+
+      &:hover {
+        background-color: #ff7a7e;
+      }
+    }
+
+    // Baris nilai-nilai input
+    .value-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      // Input nilai
+      input {
+        flex: 1;
       }
 
-      input {
-        width: 100%;
-        margin-bottom: 0.4rem;
-        padding: 0.5rem;
-        font-size: 0.95rem;
-        border: 1px solid #b3b3b3;
-        border-radius: 6px;
+      // Tombol hapus nilai
+      .remove-btn {
+        background-color: #ffffff;
+        color: #000000;
+        border: 2px solid #000;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 0.4rem 0.75rem;
+        box-shadow: 2px 2px 0 #000;
+        margin-bottom: 5px;
+
+        &:hover {
+          background-color: #ff7a7e;
+        }
+      }
+
+      // Tombol tambah nilai
+      .add-btn {
+        background-color: #ffffff;
+        color: #000000;
+        border: 2px solid #000;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 0.4rem 0.75rem;
+        box-shadow: 2px 2px 0 #000;
+        margin-bottom: 5px;
+
+        &:hover {
+          background-color: #b7e790;
+        }
       }
     }
   }
 }
 
-@keyframes gradientBG {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
+// Animasi fade in untuk transisi komponen
 @keyframes fadeIn {
   from {
     opacity: 0;

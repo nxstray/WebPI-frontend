@@ -1,156 +1,201 @@
 <header class="navbar">
+  <!-- Tombol menuju ke halaman utama -->
   <button class="logo-btn" [routerLink]="['/']">
     <img src="assets/logo-gunadarma.png" alt="Logo" class="logo-img" />
-    <b>Gunadarma Data Analysis Application</b>
+    <span class="logo-text">Gunadarma Data Analysis Application</span>
   </button>
 </header>
 
-<main class="anova-wrapper">
-  <div class="form-card table-card">
-    <h2 class="page-title">Tabel data uji ANOVA</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Grup</th>
-          <th>Nilai</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let row of data; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ row.grup }}</td>
-          <td>{{ row.nilai }}</td>
-        </tr>
-      </tbody>
-    </table>
+<main class="dashboard">
+  <!-- ROW PERTAMA: Menampilkan tabel data input + hipotesis + statistik dasar -->
+  <div class="row row-1">
+
+    <!-- Kartu berisi data input (tabel nilai-nilai dari user) -->
+    <div class="table-card card">
+      <h2 class="page-title">Calculation table</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Group</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Loop semua data (grup dan nilai) -->
+          <tr *ngFor="let row of data; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ row.grup }}</td>
+            <td>{{ row.nilai }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Menampilkan teks hipotesis nol dan alternatif -->
+      <div class="hipotesis">
+        <p><strong>Null Hypothesis (H₀) :</strong> {{ hoText }}</p>
+        <p><strong>Alternative Hypothesis (H₁) :</strong> {{ haText }}</p>
+      </div>
+    </div>
+
+    <!-- Statistik dasar: jumlah data (n), jumlah kelompok (k), dan grand mean -->
+    <div class="card">
+      <h2>Basic Statistics</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>n</th>
+            <th>k</th>
+            <th>Grand Mean</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ dfTotal + 1 }}</td>
+            <td>{{ dfAntar + 1 }}</td>
+            <td>{{ grandMean.toFixed(2) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <div class="form-card">
-    <h3>Detail Proyek</h3>
+  <!-- ROW KEDUA: Sum of Squares, Degree of freedom, Mean of Square -->
+  <div class="row row-2">
+    <!-- SS -->
+    <div class="card">
+      <h2>Sum of Squares (SS)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Total SS</th>
+            <th>Between Groups SS</th>
+            <th>Within Groups SS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ ssTotal }}</td>
+            <td>{{ ssAntar }}</td>
+            <td>{{ ssDalam }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>Formula</strong></p>
+      <!-- Rumus SS ditampilkan pakai MathJax -->
+      <p class="rumus-mathjax" [innerHTML]="rumusSS"></p>
+    </div>
 
-    <hr><br>
-    <p><strong>Hipotesis Ho :</strong> {{ hoText }}</p>
-    <p><strong>Hipotesis Ha :</strong> {{ haText }}</p>
+    <!-- Derajat kebebasan -->
+    <div class="card">
+      <h2>Degrees of Freedom (df)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Total df</th>
+            <th>Between Groups df</th>
+            <th>Within Groups df</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ dfTotal }}</td>
+            <td>{{ dfAntar }}</td>
+            <td>{{ dfDalam }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>Formula</strong></p>
+      <p class="rumus-mathjax" [innerHTML]="rumusDF"></p>
+    </div>
 
-    <br><hr><br>
+    <!-- MS -->
+    <div class="card">
+      <h2>Mean of Squares (MS)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Between Groups MS</th>
+            <th>Within Groups MS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ msAntar }}</td>
+            <td>{{ msDalam }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>Formula</strong></p>
+      <p class="rumus-mathjax" [innerHTML]="rumusMS"></p>
+    </div>
+  </div>
 
-    <h4>Diketahui</h4>
-    <table class="data-table">
-      <tr>
-        <th>n (jumlah data)</th>
-        <th>k (jumlah grup)</th>
-        <th>Grand Mean</th>
-      </tr>
-      <tr>
-        <td>{{ dfTotal + 1 }}</td>
-        <td>{{ dfAntar + 1 }}</td>
-        <td>{{ grandMean.toFixed(2) }}</td>
-      </tr>
-    </table>
+  <!-- ROW KETIGA: F-Hitung, F-Tabel, P-value, dan kesimpulan -->
+  <div class="row row-2">
+    <!-- F-Ratio -->
+    <div class="card">
+      <h2>F-Ratio</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>F Calculated</th>
+            <th>F Table</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ fHitung }}</td>
+            <td>{{ fTabel }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>Formula</strong></p>
+      <p class="rumus-mathjax" [innerHTML]="rumusF"></p>
+    </div>
 
-    <br><hr><br>
+    <!-- p-value -->
+    <div class="card">
+      <h2>p-Value</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>P-value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ pValue }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>Formula</strong></p>
+      <p class="rumus-mathjax" [innerHTML]="rumusPValue"></p>
+    </div>
 
-    <h3>Sum of Squares (SS)</h3>
+    <!-- Kesimpulan akhir berdasarkan alpha dan p-value -->
+    <div class="card">
+      <h2>Summary</h2>
+      <!-- Jika p-value < alpha maka Ho ditolak -->
+      <ng-container *ngIf="pValue < (hasil?.alpha ?? 0.05); else gagal">
+        <p>
+          Karena p-value ({{ pValue }}) < alpha ({{ hasil?.alpha ?? 0.05 }}), maka Ho ditolak dan Ha diterima.
+          Terdapat perbedaan yang signifikan antar kelompok.
+        </p>
+      </ng-container>
+      <!-- Jika tidak, maka gagal tolak Ho -->
+      <ng-template #gagal>
+        <p>
+          Karena p-value ({{ pValue }}) ≥ alpha ({{ hasil?.alpha ?? 0.05 }}), maka Ho diterima dan Ha ditolak.
+          Tidak terdapat perbedaan yang signifikan antar kelompok.
+        </p>
+      </ng-template>
+    </div>
+  </div>
 
-    <br>
-    <h4>Diketahui</h4>
-    <table class="data-table">
-      <tr>
-        <th>SS Total</th>
-        <th>SS Antar</th>
-        <th>SS Dalam</th>
-      </tr>
-      <tr>
-        <td>{{ ssTotal }}</td>
-        <td>{{ ssAntar }}</td>
-        <td>{{ ssDalam }}</td>
-      </tr>
-    </table>
-
-    <br>
-    <h4>Rumus</h4>
-    <p [innerHTML]="rumusSS"></p>
-
-    <br><hr><br>
-
-    <h3>Derajat Bebas (df)</h3>
-
-    <br>
-    <h4>Diketahui</h4>
-    <table class="data-table">
-      <tr>
-        <th>df Total</th>
-        <th>df Antar</th>
-        <th>df Dalam</th>
-      </tr>
-      <tr>
-        <td>{{ dfTotal }}</td>
-        <td>{{ dfAntar }}</td>
-        <td>{{ dfDalam }}</td>
-      </tr>
-    </table>
-
-    <br>
-    <h4>Rumus</h4>
-    <p [innerHTML]="rumusDF"></p>
-
-    <br><hr><br>
-
-    <h3>Mean Square (MS)</h3>
-
-    <br>
-    <h4>Diketahui</h4>
-    <table class="data-table">
-      <tr>
-        <th>MS Antar</th>
-        <th>MS Dalam</th>
-      </tr>
-      <tr>
-        <td>{{ msAntar }}</td>
-        <td>{{ msDalam }}</td>
-      </tr>
-    </table>
-
-    <br>
-    <h4>Rumus</h4>
-    <p [innerHTML]="rumusMS"></p>
-
-    <br><hr><br>
-
-    <h3>F-Ratio</h3>
-
-    <br>
-    <h4>Diketahui</h4>
-    <table class="data-table">
-      <tr>
-        <th>F Hitung</th>
-        <th>F Tabel</th>
-      </tr>
-      <tr>
-        <td>{{ fHitung }}</td>
-        <td>{{ fTabel }}</td>
-      </tr>
-    </table>
-
-    <br>
-    <h4>Rumus</h4>
-    <p [innerHTML]="rumusF"></p>
-
-    <br><hr><br>
-
-    <h4>Nilai p</h4>
-    <p><strong>p-value:</strong> {{ pValue }}</p>
-
-    <br><hr><br>
-
-    <h3>Kesimpulan:</h3>
-    <p>
-      Karena F hitung ({{ fHitung }}) {{ fHitung > fTabel ? '>' : '<=' }} F tabel ({{ fTabel }}),
-      maka dapat disimpulkan bahwa {{ fHitung > fTabel ? 'terdapat perbedaan yang signifikan antar kelompok.' : 'tidak terdapat perbedaan yang signifikan antar kelompok.' }}
-    </p>
-
-    <br>
-    <app-box-plot [data]="data" [yAxisLabel]="hasil?.namaVarY || 'Nilai'"></app-box-plot>
+  <!-- Visualisasi BoxPlot -->
+  <div class="card visualisasi">
+    <h2>Visualization</h2>
+    <app-box-plot [data]="data" [yAxisLabel]="hasil?.namaVariableDependen || 'Nilai'"></app-box-plot>
   </div>
 </main>

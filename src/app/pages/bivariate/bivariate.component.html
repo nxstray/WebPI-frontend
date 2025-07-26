@@ -1,69 +1,87 @@
 <header class="navbar">
+  <!-- Tombol logo yang mengarahkan ke halaman utama -->
   <button class="logo-btn" [routerLink]="['/']">
     <img src="assets/logo-gunadarma.png" alt="Logo" class="logo-img" />
-    <b>Gunadarma Data Analysis Application</b>
+    <span class="logo-text">Gunadarma Data Analysis Application</span>
   </button>
 </header>
 
-<main class="bivariate-wrapper">
+<!-- Container utama untuk form analisis korelasi Pearson -->
+<main class="bivariate-container">
   <div class="form-card">
-    <h2>Korelasi Bivariate <i>(Pearson)</i></h2>
+    <h2 class="neo-title">Bivariate Pearson Correlation</h2>
 
+    <!-- Notifikasi -->
+    <div *ngIf="notifMessage" class="notif-box" [ngClass]="notifType">
+      {{ notifMessage }}
+    </div>
+
+    <!-- Form input untuk analisis korelasi -->
     <form (ngSubmit)="onSubmit()" #korelasiForm="ngForm">
-      <label>Nama kasus</label>
+      <!-- Input nama kasus -->
+      <label>Case name</label>
       <input type="text" name="namaKasus" [(ngModel)]="formData.namaKasus" required />
 
-      <label>Nama variabel X</label>
+      <!-- Input nama variabel X -->
+      <label>Name of X variable</label>
       <input type="text" name="namaVarX" [(ngModel)]="formData.namaVarX" required />
 
-      <label>Nama variabel Y</label>
+      <!-- Input nama variabel Y -->
+      <label>Name of Y variable</label>
       <input type="text" name="namaVarY" [(ngModel)]="formData.namaVarY" required />
 
-      <label>Cara input nilai variabel</label>
+      <!-- Pilihan metode input (Excel atau manual) -->
+      <label>Input variable methods</label>
       <select [(ngModel)]="inputMethod" name="inputMethod" required>
-        <option value="">Pilih metode</option>
+        <option value="">Choose methods</option>
         <option value="excel">Import Excel</option>
         <option value="manual">Manual</option>
       </select>
 
-      <div *ngIf="inputMethod === 'excel'" class="upload-box" style="margin-top: 1rem;" (click)="fileInput.click()">
+      <!-- Komponen input file jika metode adalah Excel -->
+      <div *ngIf="inputMethod === 'excel'" class="upload-box" (click)="fileInput.click()">
         <span class="upload-icon">📁</span>
-        <p>Upload from computer</p>
+        <p>Upload from your computer</p>
         <input type="file" hidden (change)="onFileSelected($event)" accept=".xlsx, .xls" #fileInput />
         <span *ngIf="selectedFile">{{ selectedFile.name }}</span>
       </div>
 
-      <div *ngIf="inputMethod === 'manual'" class="manual-inputs" style="margin-top: 1.5rem;">
-        <div class="manual-group" style="display: flex; gap: 2rem;">
-          <div>
-            <label>Nilai X</label>
-            <div *ngFor="let x of xValues; let i = index" style="margin-bottom: 0.5rem;">
-              <input type="number" [name]="'x'+i" [ngModel]="x" (ngModelChange)="ubahNilaiX(i, $event)" />
-              <button type="button" (click)="hapusNilaiX(i)">✖</button>
+      <!-- Input manual jika metode dipilih adalah manual -->
+      <div *ngIf="inputMethod === 'manual'" class="manual-inputs">
+        <div class="manual-group">
+          <!-- Kolom input nilai X -->
+          <div class="manual-col">
+            <label>X values</label>
+            <div *ngFor="let x of xValues; let i = index" class="manual-row">
+              <input type="number" name="x{{i}}" [(ngModel)]="xValues[i]" required/>
+              <button type="button" class="remove-btn" (click)="hapusNilaiX(i)">-</button>
             </div>
-            <button type="button" (click)="tambahNilaiX()">+ Tambah Nilai X</button>
+            <button type="button" class="add-btn" (click)="tambahNilaiX()">Add new X value</button>
           </div>
 
-          <div>
-            <label>Nilai Y</label>
-            <div *ngFor="let y of yValues; let i = index" style="margin-bottom: 0.5rem;">
-              <input type="number" [name]="'y'+i" [ngModel]="y" (ngModelChange)="ubahNilaiY(i, $event)" />
-              <button type="button" (click)="hapusNilaiY(i)">✖</button>
+          <!-- Kolom input nilai Y -->
+          <div class="manual-col">
+            <label>Y values</label>
+            <div *ngFor="let y of yValues; let i = index" class="manual-row">
+              <input type="number" name="y{{i}}" [(ngModel)]="yValues[i]" required/>
+              <button type="button" class="remove-btn" (click)="hapusNilaiY(i)">-</button>
             </div>
-            <button type="button" (click)="tambahNilaiY()">+ Tambah Nilai Y</button>
+            <button type="button" class="add-btn" (click)="tambahNilaiY()">Add new Y value</button>
           </div>
         </div>
       </div>
 
-      <label style="margin-top: 1.5rem;">Nilai Alpha</label>
+      <!-- Pilihan nilai alpha (tingkat signifikansi) -->
+      <label>Alpha value (&alpha;)</label>
       <select [(ngModel)]="formData.alpha" name="alpha" required>
-        <option value="" disabled>Pilih nilai Alpha</option>
+        <option value="" disabled selected>Choose alpha value</option>
         <option [value]="0.01">0.01</option>
         <option [value]="0.05">0.05</option>
         <option [value]="0.10">0.10</option>
       </select>
 
-      <button type="submit">Hitung</button>
+      <!-- Tombol submit untuk menghitung korelasi -->
+      <button type="submit" class="btn-route">Calculate</button>
     </form>
   </div>
 </main>

@@ -1,126 +1,145 @@
 <header class="navbar">
+  <!-- Tombol logo yang mengarahkan ke halaman utama -->
   <button class="logo-btn" [routerLink]="['/']">
     <img src="assets/logo-gunadarma.png" alt="Logo" class="logo-img" />
-    <b>Gunadarma Data Analysis Application</b>
+    <span class="logo-text">Gunadarma Data Analysis Application</span>
   </button>
 </header>
 
-<main class="bivariate-wrapper">
-  <div class="form-card table-card">
-    <h2 class="page-title">Hasil Korelasi Bivariate</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>X</th>
-          <th>Y</th>
-          <th>X²</th>
-          <th>Y²</th>
-          <th>XY</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let row of data; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ row.x }}</td>
-          <td>{{ row.y }}</td>
-          <td>{{ row.x * row.x }}</td>
-          <td>{{ row.y * row.y }}</td>
-          <td>{{ row.x * row.y }}</td>
-        </tr>
-        <tr class="total-row">
-          <td>Jumlah</td>
-          <td>{{ sumX }}</td>
-          <td>{{ sumY }}</td>
-          <td>{{ sumX2 }}</td>
-          <td>{{ sumY2 }}</td>
-          <td>{{ sumXY }}</td>
-        </tr>
-      </tbody>
-    </table>
+<main class="dashboard">
+  <div class="row row-1">
+
+    <!-- Kartu pertama: Menampilkan tabel perhitungan nilai X, Y, X², Y², dan XY -->
+    <div class="table-card card">
+      <h2 class="page-title">Calculation Table</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>X</th>
+            <th>Y</th>
+            <th>X²</th>
+            <th>Y²</th>
+            <th>XY</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Menampilkan data observasi satu per satu -->
+          <tr *ngFor="let row of data; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ row.x }}</td>
+            <td>{{ row.y }}</td>
+            <td>{{ row.x * row.x }}</td>
+            <td>{{ row.y * row.y }}</td>
+            <td>{{ row.x * row.y }}</td>
+          </tr>
+          <!-- Baris total akumulasi -->
+          <tr class="total-row">
+            <td>Total</td>
+            <td>{{ sumX }}</td>
+            <td>{{ sumY }}</td>
+            <td>{{ sumX2 }}</td>
+            <td>{{ sumY2 }}</td>
+            <td>{{ sumXY }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Menampilkan hipotesis nol dan alternatif -->
+      <div class="hipotesis">
+        <p><strong>Null Hypothesis (H₀) :</strong> {{ hoText }}</p>
+        <p><strong>Alternative Hypothesis (H₁) :</strong> {{ haText }}</p>
+      </div>
+    </div>
+
+    <!-- Kartu kedua: Menampilkan tabel koefisien korelasi -->
+    <div class="card">
+      <h2>Coefficient of Correlation</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ΣX</th>
+            <th>ΣY</th>
+            <th>ΣX²</th>
+            <th>ΣY²</th>
+            <th>ΣXY</th>
+            <th>n</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ sumX }}</td>
+            <td>{{ sumY }}</td>
+            <td>{{ sumX2 }}</td>
+            <td>{{ sumY2 }}</td>
+            <td>{{ sumXY }}</td>
+            <td>{{ hasil?.n }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Menampilkan rumus perhitungan r menggunakan MathJax -->
+      <p><strong>Formula</strong></p>
+      <p class="rumus-mathjax" [innerHTML]="rumusR"></p>
+    </div>
   </div>
 
-  <div class="form-card">
-    <h3>Detail Proyek</h3>
-    <hr><br>
+  <div class="row row-2">
+    <!-- Kartu ketiga: Menampilkan perhitungan signifikansi (uji-t) -->
+    <div class="card">
+      <h2>Significant of Correlation</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>r</th>
+            <th>n</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ r }}</td>
+            <td>{{ hasil?.n }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>Formula</strong></p>
+      <p class="rumus-mathjax" [innerHTML]="rumusT"></p>
+    </div>
 
-    <p><strong>Hipotesis Ho :</strong> {{ hoText }}</p>
-    <p><strong>Hipotesis Ha :</strong> {{ haText }}</p>
+    <!-- Kartu keempat: Menampilkan koefisien determinasi (r²) -->
+    <div class="card">
+      <h2>Coefficient of Determination</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>r</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ r }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>Formula</strong></p>
+      <p class="rumus-mathjax" [innerHTML]="rumusR2"></p>
+    </div>
 
-    <br><hr><br>
-    <h3>Koefisien Korelasi</h3>
-    <br>
+    <!-- Kartu kelima: Menyimpulkan hasil pengujian hipotesis -->
+    <div class="card">
+      <h2>Summary</h2>
+      <p>
+        Karena t hitung ({{ tHitung }}) {{ tHitung > tTabel ? '>' : '<=' }} t tabel ({{ tTabel }}),
+        maka Ho {{ tHitung > tTabel ? 'ditolak' : 'diterima' }} dan Ha {{ tHitung > tTabel ? 'diterima' : 'ditolak' }}.
+        {{ tHitung > tTabel ? 'Terdapat hubungan signifikan' : 'Tidak terdapat hubungan signifikan' }}
+        antara {{ varX }} dan {{ varY }} sebesar {{ r }} dengan determinasi {{ (r * r * 100).toFixed(1) }}%.
+      </p>
+    </div>
+  </div>
 
-    <p><strong>Diketahui</strong></p>
-    <table class="data-table">
-      <tr>
-        <th>ΣX</th>
-        <th>ΣY</th>
-        <th>ΣX²</th>
-        <th>ΣY²</th>
-        <th>ΣXY</th>
-        <th>n</th>
-      </tr>
-      <tr>
-        <td>{{ sumX }}</td>
-        <td>{{ sumY }}</td>
-        <td>{{ sumX2 }}</td>
-        <td>{{ sumY2 }}</td>
-        <td>{{ sumXY }}</td>
-        <td>{{ hasil?.n }}</td>
-      </tr>
-    </table>
-
-    <br>
-    <p><strong>Rumus</strong></p>
-    <p [innerHTML]="rumusR"></p>
-
-    <br><hr><br>
-    <h3>Uji Signifikansi (Uji t)</h3>
-
-    <br>
-    <p><strong>Diketahui</strong></p>
-    <table class="data-table">
-      <tr>
-        <th>r</th>
-        <th>n</th>
-      </tr>
-      <tr>
-        <td>{{ r }}</td>
-        <td>{{ hasil?.n }}</td>
-      </tr>
-    </table>
-
-    <br>
-    <p><strong>Rumus</strong></p>
-    <p [innerHTML]="rumusT"></p>
-
-    <br><hr><br>
-    <h3>Koefisien Determinasi</h3>
-
-    <br>
-    <p><strong>Diketahui</strong></p>
-    <table class="data-table">
-      <tr>
-        <th>r</th>
-      </tr>
-      <tr>
-        <td>{{ r }}</td>
-      </tr>
-    </table>
-
-    <br>
-    <p><strong>Rumus</strong></p>
-    <p [innerHTML]="rumusR2"></p>
-
-    <br><hr><br>
-    <h3>Kesimpulan</h3>
-    <p>
-      Karena t hitung ({{ tHitung }}) {{tHitung > tTabel ? '>' : '<=' }} t tabel ({{ tTabel }}), maka Ho {{ tHitung > tTabel ? 'ditolak' : 'diterima' }} dan Ha {{ tHitung > tTabel ? 'diterima' : 'ditolak' }}.
-      {{ tHitung > tTabel ? 'Terdapat hubungan signifikan' : 'Tidak terdapat hubungan signifikan' }} antara {{ varX }} dan {{ varY }} sebesar {{ r }} dengan determinasi {{ (r * r * 100).toFixed(1) }}%.
-    </p>
-
-    <br>
+  <!-- Kartu visualisasi scatter plot -->
+  <div class="card visualisasi">
+    <h2>Visualization</h2>
     <app-scatter-plot [xValues]="xValues || []" [yValues]="yValues || []"></app-scatter-plot>
   </div>
 </main>

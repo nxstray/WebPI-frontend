@@ -1,59 +1,90 @@
 <header class="navbar">
+  <!-- Tombol menuju ke halaman utama -->
   <button class="logo-btn" [routerLink]="['/']">
     <img src="assets/logo-gunadarma.png" alt="Logo" class="logo-img" />
-    <b>Gunadarma Data Analysis Application</b>
+    <span class="logo-text">Gunadarma Data Analysis Application</span>
   </button>
 </header>
 
-<main class="bivariate-wrapper">
+<!-- Bagian utama konten halaman -->
+<main class="anova-container">
+  <!-- Kartu/form di tengah -->
   <div class="form-card">
-    <h2>Uji ANOVA <i>(One-Way)</i></h2>
+    <h2>One way Analysis Of Variance</h2>
 
+    <!-- Tampilkan pesan notif kalau ada -->
+    <div *ngIf="notifMessage" class="notif-box" [ngClass]="notifType">
+      {{ notifMessage }}
+    </div>
+
+    <!-- Form utama -->
     <form (ngSubmit)="onSubmit()">
-      <label>Nama kasus</label>
-      <input type="text" name="namaKasus" [(ngModel)]="formData.namaKasus" required/>
+      <!-- Input nama kasus -->
+      <label>Case name</label>
+      <input type="text" name="namaKasus" [(ngModel)]="formData.namaKasus" required />
 
-      <label>Nama variabel dependen</label>
-      <input type="text" name="namaKasus" [(ngModel)]="formData.namaVariabelDependen" required/>
+      <label>Name of independent variable</label>
+      <input type="text" name="namaVariabelIndependen" [(ngModel)]="formData.namaVariableIndependen" required />
 
-      <label>Cara input nilai</label>
+      <!-- Input nama variabel dependen -->
+      <label>Name of dependent variable</label>
+      <input type="text" name="namaVariabelDependen" [(ngModel)]="formData.namaVariableDependen" required />
+
+      <!-- Pilih metode input (excel/manual) -->
+      <label>Input variable methods</label>
       <select name="anovaInputMethod" [(ngModel)]="anovaInputMethod" required>
-        <option value="">Pilih metode</option>
+        <option value="">Choose methods</option>
         <option value="excel">Import Excel</option>
         <option value="manual">Manual</option>
       </select>
 
+      <!-- Jika pilih excel, tampilkan upload box -->
       <div *ngIf="anovaInputMethod === 'excel'" class="upload-box" (click)="fileInput.click()">
         <span class="upload-icon">📁</span>
-        <p>Upload from computer</p>
+        <p>Upload from your computer</p>
         <input id="excelUpload" name="excelUpload" type="file" hidden (change)="onAnovaFileSelected($event)" #fileInput />
         <span *ngIf="selectedAnovaFile">{{ selectedAnovaFile.name }}</span>
       </div>
 
+      <!-- Jika pilih manual, tampilkan input manual -->
       <div *ngIf="anovaInputMethod === 'manual'" class="manual-inputs">
-        <label>Masukkan data tiap kelompok</label>
+        <!-- Untuk setiap grup manual -->
         <div class="manual-group" *ngFor="let group of manualGroups; let i = index">
-          <div>
-            <label for="groupName{{i}}">Kelompok {{ i + 1 }}</label>
-            <input id="groupName{{i}}" name="groupName{{i}}" type="text" placeholder="Nama kelompok" [(ngModel)]="group.nama" />
-            <input *ngFor="let value of group.values; let j = index"
-                   id="g{{i}}val{{j}}" name="g{{i}}val{{j}}"
-                   type="number"
-                   [(ngModel)]="group.values[j]" />
+          <div class="group-header">
+            <!-- Label grup -->
+            <label for="groupName{{i}}">Group {{ i + 1 }}</label>
+            <!-- Tombol hapus grup jika jumlah grup > 2 -->
+            <button type="button" class="hapus-grup-btn" (click)="removeGroup(i)" *ngIf="manualGroups.length > 2">
+              Delete group
+            </button>
+          </div>
+
+          <!-- Input nama grup -->
+          <input type="text" id="groupName{{ i }}" name="groupName{{ i }}" [(ngModel)]="group.nama" placeholder="Group name" required />
+
+          <!-- Input nilai dalam grup -->
+          <div class="value-row" *ngFor="let value of group.values; let j = index">
+            <input type="number" [(ngModel)]="group.values[j]" name="g{{ i }}val {{ j }}" placeholder="Value" />
+            <button type="button" class="remove-btn" (click)="removeValueInput(i, j)">-</button>
+            <button type="button" class="add-btn" (click)="addValueInput(i)">+</button>
           </div>
         </div>
-        <button type="button" (click)="addGroup()">+ Tambah Kelompok</button>
+
+        <!-- Tambah grup baru -->
+        <button type="button" (click)="addGroup()">Add new group</button>
       </div>
 
-      <label for="alpha">Nilai Alpha</label>
+      <!-- Pilih nilai alpha -->
+      <label for="alpha">Alpha value (&alpha;)</label>
       <select id="alpha" name="alpha" [(ngModel)]="formData.alpha">
-        <option disabled selected>Pilih nilai Alpha</option>
+        <option disabled selected>Choose alpha value (&alpha;)</option>
         <option [value]="0.01">0.01</option>
         <option [value]="0.05">0.05</option>
         <option [value]="0.10">0.10</option>
       </select>
 
-      <button type="submit">Hitung</button>
+      <!-- Tombol submit -->
+      <button type="submit">Calculate</button>
     </form>
   </div>
 </main>
