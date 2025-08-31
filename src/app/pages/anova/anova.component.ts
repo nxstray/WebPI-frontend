@@ -249,12 +249,72 @@ export class AnovaComponent {
       }
 
       // Validasi dasar grup manual - fokus pada nilai kosong/null/undefined
-      const hasEmptyValues = this.manualGroups.some(grup =>
-        grup.values.length < 2 ||
-        grup.values.some(v => v === null || v === undefined || v === '' || isNaN(Number(v)))
-      );
+      console.log('=== ANOVA MANUAL INPUT VALIDATION DEBUG ===');
+      console.log('Input method:', inputMethod);
+      console.log('Manual groups array:', JSON.stringify(this.manualGroups));
+      console.log('Manual groups length:', this.manualGroups.length);
+      
+      // Debug setiap grup
+      this.manualGroups.forEach((grup, grupIndex) => {
+        console.log(`--- Group ${grupIndex} Debug ---`);
+        console.log(`Group name: "${grup.nama}"`);
+        console.log(`Group values:`, grup.values);
+        console.log(`Group values length:`, grup.values.length);
+        console.log(`Group values types:`, grup.values.map((val, idx) => `[${idx}]: ${typeof val} = "${val}"`));
+        
+        // Debug setiap nilai dalam grup
+        grup.values.forEach((value, valueIndex) => {
+          console.log(`Group[${grupIndex}].values[${valueIndex}]: value="${value}", type="${typeof value}", isNull=${value == null}, isUndefined=${value === undefined}, isEmpty=${value === ''}, isNaN=${isNaN(Number(value))}`);
+        });
+      });
+
+      const hasEmptyValues = this.manualGroups.some((grup, grupIndex) => {
+        console.log(`--- Checking Group ${grupIndex}: "${grup.nama}" ---`);
+        console.log(`Values length: ${grup.values.length}`);
+        
+        // Cek minimal 2 nilai per grup
+        if (grup.values.length < 2) {
+          console.error(`Group ${grupIndex} has less than 2 values: ${grup.values.length}`);
+          return true;
+        }
+        
+        // Cek setiap nilai dalam grup
+        const hasEmpty = grup.values.some((v, valueIndex) => {
+          console.log(`Checking Group[${grupIndex}].values[${valueIndex}]: "${v}"`);
+          
+          const isNull = v === null;
+          const isUndefined = v === undefined;
+          const isEmpty = v === '';
+          const isNaN_check = isNaN(Number(v));
+          
+          console.log(`Value checks - null: ${isNull}, undefined: ${isUndefined}, empty: ${isEmpty}, isNaN: ${isNaN_check}`);
+          
+          const isInvalid = isNull || isUndefined || isEmpty || isNaN_check;
+          
+          if (isInvalid) {
+            console.error(`INVALID VALUE FOUND in Group ${grupIndex}, Value ${valueIndex}`);
+            console.error(`Value: "${v}", type: ${typeof v}`);
+            console.error(`Checks - null: ${isNull}, undefined: ${isUndefined}, empty: ${isEmpty}, isNaN: ${isNaN_check}`);
+          } else {
+            console.log(`Group[${grupIndex}].values[${valueIndex}] is valid`);
+          }
+          
+          return isInvalid;
+        });
+        
+        console.log(`Group ${grupIndex} has empty values:`, hasEmpty);
+        return hasEmpty;
+      });
+
+      console.log('Final hasEmptyValues result:', hasEmptyValues);
+      console.log('Manual groups length check:', this.manualGroups.length);
+      console.log('=====================================');
 
       if (hasEmptyValues || this.manualGroups.length < 3) {
+        console.error('ANOVA MANUAL VALIDATION FAILED');
+        console.error('Has empty values:', hasEmptyValues);
+        console.error('Groups count:', this.manualGroups.length);
+        console.error('Minimum groups required: 3');
         this.showNotif('Pastikan nilai kelompok tidak ada yang kosong ya.');
         return;
       }
@@ -277,6 +337,10 @@ export class AnovaComponent {
 
       // Konversi semua nilai ke number (termasuk negatif, nol, desimal)
       nilaiGrup = this.manualGroups.map(g => g.values.map(v => parseFloat(String(v))));
+
+      console.log('Final data to send:');
+      console.log('namaGrup:', namaGrup);
+      console.log('nilaiGrup:', nilaiGrup);
 
       // Kirim data manual menggunakan endpoint /manual
       const data: AnovaDTO = {

@@ -197,16 +197,62 @@ export class BivariateComponent {
 
       // Validasi untuk input manual - cek apakah ada nilai yang kosong/null/undefined
       if (this.inputMethod === 'manual') {
+        console.log('=== MANUAL INPUT VALIDATION DEBUG ===');
+        console.log('Input method:', this.inputMethod);
+        console.log('X Values array:', this.xValues);
+        console.log('Y Values array:', this.yValues);
+        console.log('X Values length:', this.xValues.length);
+        console.log('Y Values length:', this.yValues.length);
+        console.log('X Values types:', this.xValues.map((val, idx) => `[${idx}]: ${typeof val} = "${val}"`));
+        console.log('Y Values types:', this.yValues.map((val, idx) => `[${idx}]: ${typeof val} = "${val}"`));
+        
         for (let i = 0; i < xVals.length; i++) {
+          console.log(`--- Checking index ${i} ---`);
+          console.log(`xVals[${i}]:`, xVals[i], `(type: ${typeof xVals[i]})`);
+          console.log(`yVals[${i}]:`, yVals[i], `(type: ${typeof yVals[i]})`);
+          
+          // Check null/undefined
+          const xIsNull = xVals[i] == null;
+          const xIsUndefined = xVals[i] === undefined;
+          const yIsNull = yVals[i] == null;
+          const yIsUndefined = yVals[i] === undefined;
+          
+          console.log(`xVals[${i}] == null:`, xIsNull);
+          console.log(`xVals[${i}] === undefined:`, xIsUndefined);
+          console.log(`yVals[${i}] == null:`, yIsNull);
+          console.log(`yVals[${i}] === undefined:`, yIsUndefined);
+          
           if (xVals[i] == null || xVals[i] === undefined || 
               yVals[i] == null || yVals[i] === undefined) {
+            console.error(`NULL/UNDEFINED VALIDATION FAILED at index ${i}`);
+            console.error(`X value: ${xVals[i]} (null: ${xIsNull}, undefined: ${xIsUndefined})`);
+            console.error(`Y value: ${yVals[i]} (null: ${yIsNull}, undefined: ${yIsUndefined})`);
+            console.log('=====================================');
             return 'Pastikan nilai X dan Y tidak ada yang kosong ya.';
           }
+          
           // Cek jika nilai tidak valid (NaN)
+          const xNumber = Number(xVals[i]);
+          const yNumber = Number(yVals[i]);
+          const xIsNaN = isNaN(xNumber);
+          const yIsNaN = isNaN(yNumber);
+          
+          console.log(`Number(xVals[${i}]):`, xNumber, `(isNaN: ${xIsNaN})`);
+          console.log(`Number(yVals[${i}]):`, yNumber, `(isNaN: ${yIsNaN})`);
+          
           if (isNaN(Number(xVals[i])) || isNaN(Number(yVals[i]))) {
+            console.error(`NaN VALIDATION FAILED at index ${i}`);
+            console.error(`X original: ${xVals[i]} -> Number: ${xNumber} (isNaN: ${xIsNaN})`);
+            console.error(`Y original: ${yVals[i]} -> Number: ${yNumber} (isNaN: ${yIsNaN})`);
+            console.log('=====================================');
             return 'Pastikan nilai X dan Y tidak ada yang kosong ya.';
           }
+          
+          console.log(`Index ${i} validation passed`);
         }
+        
+        console.log('All manual input validation passed');
+        console.log('=====================================');
       }
 
       // Validasi variansi - cek apakah semua nilai sama (tidak ada variansi)

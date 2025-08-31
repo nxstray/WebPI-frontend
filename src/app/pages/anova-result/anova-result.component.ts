@@ -44,6 +44,7 @@ export class AnovaResultComponent implements OnInit, AfterViewChecked {
   fHitung = 0;
   fTabel = 0;
   pValue = 0;
+  pValueFormatted = '0'; // Tambahan untuk menyimpan p-value yang sudah diformat
 
   // Rata-rata keseluruhan
   grandMean = 0;
@@ -93,8 +94,8 @@ export class AnovaResultComponent implements OnInit, AfterViewChecked {
     this.ssDalam = this.ssTotal - this.ssAntar;
 
     // Hitung derajat bebas
-    const k = grupMap.size;        // jumlah kelompok
-    const n = allNilai.length;     // jumlah data
+    const k = grupMap.size;
+    const n = allNilai.length;
     this.dfTotal = n - 1;
     this.dfAntar = k - 1;
     this.dfDalam = n - k;
@@ -114,9 +115,12 @@ export class AnovaResultComponent implements OnInit, AfterViewChecked {
       this.fTabel = parseFloat(
         jStat.centralF.inv(1 - alpha, this.dfAntar, this.dfDalam).toFixed(3)
       );
-      this.pValue = parseFloat(
-        (1 - jStat.centralF.cdf(this.fHitung, this.dfAntar, this.dfDalam)).toFixed(4)
-      );
+      
+      // Hitung p-value dengan presisi tinggi (tanpa pembulatan dulu)
+      this.pValue = 1 - jStat.centralF.cdf(this.fHitung, this.dfAntar, this.dfDalam);
+      
+      // Format p-value dengan fungsi khusus
+      this.pValueFormatted = this.formatPValue(this.pValue);
     }
   }
 
@@ -127,6 +131,61 @@ export class AnovaResultComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  /**
+   * Format p-value dengan angka di belakang koma yang dinamis
+   * Menampilkan nilai sebenarnya tanpa membulatkan ke 0
+   */
+  private formatPValue(pValue: number, maxDecimals: number = 8): string {
+    // Jika p-value adalah 0 atau sangat mendekati 0
+    if (pValue === 0 || pValue < Number.EPSILON) {
+      return '< 0.00000001'; // Menunjukkan bahwa nilai sangat kecil
+    }
+
+    // Jika p-value adalah 1 atau sangat mendekati 1
+    if (pValue >= 1 - Number.EPSILON) {
+      return '1';
+    }
+
+    // Konversi ke string dengan presisi maksimal
+    const pValueStr = pValue.toFixed(maxDecimals);
+    
+    // Hilangkan trailing zeros dan titik jika perlu
+    let formatted = pValueStr.replace(/\.?0+$/, '');
+    
+    // Jika hasil formatting kosong atau hanya titik, return minimal format
+    if (formatted === '' || formatted === '.') {
+      formatted = '0';
+    }
+    
+    // Jika masih terlalu pendek dan nilai aslinya bukan 0, pastikan ada minimal 1 digit
+    if (formatted === '0' && pValue > 0) {
+      // Cari digit pertama yang bukan 0
+      let decimals = 1;
+      let testValue = pValue;
+      while (testValue < 0.1 && decimals <= maxDecimals) {
+        testValue *= 10;
+        decimals++;
+      }
+      
+      // Format dengan jumlah desimal yang sesuai
+      formatted = pValue.toFixed(Math.min(decimals + 1, maxDecimals)).replace(/0+$/, '').replace(/\.$/, '');
+      
+      // Jika masih 0, berarti nilai terlalu kecil
+      if (formatted === '0' || formatted === '') {
+        return `< ${(1 / Math.pow(10, maxDecimals)).toFixed(maxDecimals).replace(/0+$/, '').replace(/\.$/, '')}`;
+      }
+    }
+    
+    return formatted;
+  }
+
+  /**
+   * Get formatted p-value untuk display di template
+   */
+  get formattedPValue(): string {
+    return this.pValueFormatted;
+  }
+
   // Fungsi untuk menghitung rata-rata dari array nilai
   private rataRata(data: number[]): number {
     return data.reduce((a, b) => a + b, 0) / data.length;
@@ -134,7 +193,8 @@ export class AnovaResultComponent implements OnInit, AfterViewChecked {
 
   // Hipotesis nol (tidak ada perbedaan rata-rata antar grup)
   get hoText(): string {
-    return 'Semua rata-rata antar kelompok adalah sama';
+    const grups = [...new Set(this.data.map(d => d.grup))];
+    return `Tidak terdapat perbedaan rata-rata minimal satu kelompok dari ${grups.join(', ')}`;
   }
 
   // Hipotesis alternatif (minimal ada satu perbedaan rata-rata)
@@ -194,11 +254,11 @@ export class AnovaResultComponent implements OnInit, AfterViewChecked {
     `;
   }
 
-  // Tampilkan rumus dan hasil perhitungan p-value
+  // Tampilkan rumus dan hasil perhitungan p-value dengan format yang sudah diperbaiki
   get rumusPValue(): string {
     return `
       \\[
-      p = P(F_{${this.dfAntar}, ${this.dfDalam}} > ${this.fHitung}) = 1 - F_{\\text{cdf}}(${this.fHitung}, ${this.dfAntar}, ${this.dfDalam}) = ${this.pValue}
+      p = P(F_{${this.dfAntar}, ${this.dfDalam}} > ${this.fHitung}) = 1 - F_{\\text{cdf}}(${this.fHitung}, ${this.dfAntar}, ${this.dfDalam}) = ${this.formattedPValue}
       \\]
     `;
   }
